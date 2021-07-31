@@ -7,7 +7,7 @@ router.get("/", async (req, res) => {
     res.json(listOfOperations);
 });
 
-router.get("/byId/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
     const id = req.params.id;
     const operation = await Operations.findByPk(id);
     res.json(operation);
