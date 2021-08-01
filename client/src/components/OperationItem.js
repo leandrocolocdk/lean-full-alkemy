@@ -9,7 +9,7 @@ const OperationItem = (props) => {
             <OperationDate date={props.date} />
             <div className="operation-item__description">
                 <h2>{props.concept}</h2>
-                <div className="operation-item__price">${props.amount}</div>
+                <div className="operation-item__price">{props.type} ${props.amount}</div>
             </div>
         </Card>
 

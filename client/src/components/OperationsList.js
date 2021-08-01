@@ -10,6 +10,7 @@ const OperationsList = (props) => {
                     concept={operation.concept}
                     amount={operation.amount}
                     date={operation.date}
+                    type={operation.type}
                 />
             ))}
         </ul>

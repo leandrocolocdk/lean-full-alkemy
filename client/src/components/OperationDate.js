@@ -4,7 +4,6 @@ const OperationDate = (props) => {
     const date = new Date(props.date)
 
     const day = date.toLocaleString('es-AR', { day: '2-digit' })
-    console.log(typeof (day))
     const month = date.toLocaleString('es-AR', { month: 'long' })
     const year = date.getFullYear()
     return (
