@@ -13,7 +13,13 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         type: {
-            type: DataTypes.STRING,
+            type: DataTypes.ENUM(['egress', 'entry']),
+            validate: {
+                isIn: {
+                    args: [['egress', 'entry']],
+                    msg: "Must be egress or entry"
+                }
+            },
             allowNull: false,
         },
     });

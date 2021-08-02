@@ -10,10 +10,12 @@ const db = require("./models");
 
 // Routers
 const operationRouter = require("./routes/Operations");
-app.use("/operations", operationRouter);
+app.use("/api/v1/operations", operationRouter);
+const usersRouter = require("./routes/Users");
+app.use("/api/v1/users", usersRouter);
 
 db.sequelize.sync().then(() => {
     app.listen(3001, () => {
         console.log("Server running on port 3001");
     });
-});
+}).catch(err => console.log(err))
