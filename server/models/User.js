@@ -6,26 +6,22 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
             validate: {
-                len: {
-                    args: [0, 50],
-                    msg: 'El nombre tiene demasiados carácteres'
-                }
+                len: [3, 50],
+                // msg: 'El nombre tiene demasiados carácteres'
             }
         },
         email: {
             type: DataTypes.STRING,
-            validate: {
-                isEmail: {
-                    msg: 'No es una dirección de correo electrónico.'
-                },
-            },
+            required: true,
+            isEmail: true,
+
             allowNull: false,
             unique: true
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: {
+            len: {
                 max: 20,
                 min: 6,
             },
@@ -44,7 +40,6 @@ module.exports = (sequelize, DataTypes) => {
                     }
                 }
             }
-
         }
     );
     User.validPassword = async (password, hash) => {
@@ -52,8 +47,8 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     User.associate = (models) => {
-        User.hasMany(models.Operations, {
-            onDelete: "cascade",
+        User.hasMany(models.Operation, {
+            onDelete: "cascade"
         });
     };
 

@@ -1,45 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const { Operations } = require("../models");
-const operationController = require("../controllers/operationController")
+const { Operation } = require("../models");
+
+const operationController = require("../controllers/OperationController")
 
 
-// router.get("/", operationController.getAll);
-// router.post("/", operations.create);
+router.get("/", operationController.getAll);
+router.post("/", operationController.create);
 
-// router.get("/:id", operations.findOne);
+router.get("/:id", operationController.findOne);
 
-// router.put("/:id", operations.update);
+router.put("/:id", operationController.update);
 
-// router.delete("/:id", operations.delete);
+router.delete("/:id", operationController.delete);
 
-router.get("/", async (_, res) => {
-    try {
-        const operations = await Operations.findAll();
-        return res.status(200).json({ operations });
-    } catch (error) {
-        return res.status(500).send(error.message);
-    }
-});
+// Todas las operaciones del usuario === userId
+router.get("/user/:userId", operationController.getOperationsByUser);
 
-router.get("/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const operations = await Operations.findByPk(id);
-        return res.status(200).json({ operations });
-    } catch (error) {
-        return res.status(500).send(error.message);
-    }
-});
 
-router.post("/", async (req, res) => {
-    try {
-        const operation = req.body;
-        const operations = await Operations.create(operation);
-        return res.status(201).json(operations);
-    } catch (error) {
-        return res.status(500).send(error.message);
-    }
-});
+router.get("/user/:userId", operationController.getAllByUser);
+
+router.get("/:UserId", operationController.findOne);
+
+router.get("/user/:id", operationController.findOneByUser);
 
 module.exports = router;
