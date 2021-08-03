@@ -1,7 +1,8 @@
 const { User } = require("../models");
-
 const express = require("express");
 const router = express.Router();
+
+
 
 exports.register = async (req, res) => {
     const { username, email, password, passwordConfirm } = req.body;
@@ -40,31 +41,17 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
-
-    // if (!email) {
-    //     return res.status(422).json({
-    //         errors: {
-    //             email: "is required"
-    //         }
-    //     });
-    // }
-    // if (!password) {
-    //     return res.status(422).json({
-    //         errors: {
-    //             password: "is required"
-    //         }
-    //     });
-    // }
-
     const user = await User.findOne({ where: { email } });
 
-    if (!user) res.json({ error: "User Doesn't Exist" });
+    if (!user) return res.json({ error: "User Doesn't Exist" });
 
-    await User.validPassword(password, user.password).then((match) => {
-        if (!match) res.json({ error: "Wrong Username And Password Combination" });
+    await User.validPassword(password, user.password)
+        .then((match) => {
+            if (!match) res.json({ error: "Wrong Username And Password Combination" });
 
-        res.json("YOU LOGGED IN!!!");
-    }).catch(error => res.status(400).send(error))
+            res.json("YOU LOGGED IN!!!");
+        })
+        .catch(error => res.status(400).send(error))
 
 }
 

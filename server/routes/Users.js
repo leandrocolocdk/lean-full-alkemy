@@ -3,10 +3,11 @@ const router = express.Router();
 const User = require("../models/User");
 
 const UserController = require("../controllers/UserController")
+const AuthController = require('../controllers/AuthController');
 
-router.post("/register", UserController.register)
+router.post("/signup", AuthController.signUp)
 
-router.post("/login", UserController.login)
+router.post("/signin", AuthController.signIn)
 
 // router.get("/", userController.getAll);
 // router.post("/", userController.create);

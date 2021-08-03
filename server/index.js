@@ -3,8 +3,9 @@ const app = express();
 const morgan = require('morgan');
 const cors = require('cors')
 
+// Middleware
 app.use(express.json());
-// app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false }))
 app.use(cors());
 
 // Development logging

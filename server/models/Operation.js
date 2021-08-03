@@ -1,4 +1,4 @@
-const { Operation, User } = require("../models")
+const User = require("../models/User")
 
 module.exports = (sequelize, DataTypes) => {
     const Operation = sequelize.define("Operation", {
@@ -35,9 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Operation.associate = (models) => {
-        Operation.belongsTo(models.User,
-            // { foreignKey: "UserId" }
-        );
+        Operation.belongsTo(models.User, { as: "author", foreignKey: "userId" });
     };
 
     return Operation;

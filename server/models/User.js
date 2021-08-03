@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const Operation = require("../models/Operation")
 
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define("User", {
@@ -6,25 +7,33 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
             validate: {
-                len: [3, 50],
-                // msg: 'El nombre tiene demasiados carácteres'
+                len: {
+                    args: [3, 50],
+                    msg: 'The username must contain a minimum of 2 characters'
+                }
             }
         },
         email: {
             type: DataTypes.STRING,
             required: true,
-            isEmail: true,
-
+            validate: {
+                isEmail: {
+                    msg: 'The email must be a valid email'
+                }
+            },
             allowNull: false,
             unique: true
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
-            len: {
-                max: 20,
-                min: 6,
+            validate: {
+                len: {
+                    args: [6, 30],
+                    msg: 'The password must have a minimum of 6 characters'
+                }
             },
+
         },
     },
         {
@@ -47,9 +56,11 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     User.associate = (models) => {
-        User.hasMany(models.Operation, {
-            onDelete: "cascade"
-        });
+        User.hasMany(models.Operation,
+            {
+                as: "operations", foreignKey: "userId",
+                onDelete: "cascade"
+            });
     };
 
     return User;
