@@ -22,7 +22,8 @@ const operationRouter = require("./routes/Operations");
 app.use("/api/v1/operations", operationRouter);
 const usersRouter = require("./routes/Users");
 app.use("/api/v1/users", usersRouter);
-
+const categoryRouter = require("./routes/category");
+app.use("/api/v1/categories", categoryRouter);
 
 
 // Arrancamos el servidor

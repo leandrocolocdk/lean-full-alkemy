@@ -1,4 +1,4 @@
-import "../components/OperationDate.css"
+import "./OperationDate.css"
 
 const OperationDate = (props) => {
     const date = new Date(props.date)

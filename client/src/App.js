@@ -1,17 +1,42 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Home from './pages/Home'
+import { useContext } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
-const App = () => {
+import Layout from './components/Layout/Layout';
+import ListOperationPage from './pages/ListOperationPage';
+import AuthPage from './pages/AuthPage';
+import HomePage from './pages/HomePage';
+import AuthContext from './store/auth-context';
+function App() {
+
+  const authCtx = useContext(AuthContext);
 
   return (
-    <div className="App">
-      <Router>
-        <Switch>
-          <Route path="/" exact component={Home} />
-        </Switch>
-      </Router>
-    </div>
+    <Layout>
+      <Switch>
+        <Route path='/' exact>
+          <HomePage />
+          {/* {authCtx.isLoggedIn && <HomePage />} */}
+          {!authCtx.isLoggedIn && <Redirect to='/auth' />}
+        </Route>
+        {!authCtx.isLoggedIn && (
+          <Route path='/auth'>
+            <AuthPage />
+          </Route>
+        )}
+        <Route path='/entry'>
+          {authCtx.isLoggedIn && <ListOperationPage />}
+          {!authCtx.isLoggedIn && <Redirect to='/auth' />}
+        </Route>
+        <Route path='/egress'>
+          {authCtx.isLoggedIn && <ListOperationPage />}
+          {!authCtx.isLoggedIn && <Redirect to='/auth' />}
+        </Route>
+        <Route path='*'>
+          <Redirect to='/' />
+        </Route>
+      </Switch>
+    </Layout>
   );
 }
 

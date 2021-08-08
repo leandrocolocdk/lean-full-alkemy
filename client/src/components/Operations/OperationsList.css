@@ -1,0 +1,9 @@
+.operations-list {
+    list-style: none;
+    padding: 0;
+}
+  
+.operations-list__fallback {
+  color: white;
+  text-align: center;
+}

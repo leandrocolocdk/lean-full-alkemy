@@ -1,12 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './OperationForm.css'
-import axios from 'axios'
+import axiosInstance from '../../../services/axios'
 
 const OperationForm = (props) => {
     const [enteredConcept, setEnteredConcept] = useState('')
     const [enteredDate, setEnteredDate] = useState('')
     const [enteredAmount, setEnteredAmount] = useState('')
     const [enteredType, setEnteredType] = useState('')
+    const [enteredCategory, setEnteredCategory] = useState('')
+
+    // useEffect(() => {
+
+    // }, []);
+    if (props.editOperation.concept !== '') {
+
+        console.log("desde form", props.editOperation)
+    }
 
     const conceptChangeHandler = (event) => {
         setEnteredConcept(event.target.value)
@@ -22,27 +31,42 @@ const OperationForm = (props) => {
     const typeChangeHandler = (event) => {
         setEnteredType(event.target.value)
     }
+    const categoryChangeHandler = (event) => {
+        setEnteredCategory(event.target.value)
+    }
 
-    const submitHandler = (event) => {
+    const submitHandler = async (event) => {
         event.preventDefault();
+
+        //validar entradas
+        if (!enteredConcept
+            || !enteredDate
+            || !enteredAmount
+            || !enteredType
+
+        ) return
+
 
         const operationData = {
             concept: enteredConcept,
             amount: enteredAmount,
             date: new Date(enteredDate),
-            type: enteredType
+            type: enteredType,
+            category: enteredCategory
         }
         // console.log(operationData)
-        axios.post("http://localhost:3001/operations", operationData).then(response => {
-            console.log(response)
-            props.onSaveOperationData(operationData);
-        })
+        await axiosInstance.post("http://localhost:3001/api/v1/operations", operationData)
+            .then(response => {
+                props.onSaveOperationData(response.data);
+            })
 
         setEnteredConcept('');
         setEnteredDate('');
         setEnteredAmount('');
         setEnteredType('');
+        setEnteredCategory('');
     }
+
     return (
         <form onSubmit={submitHandler}>
             <div className='new-operation__controls'>
@@ -58,7 +82,12 @@ const OperationForm = (props) => {
                 </div>
                 <div className="new-operation__control">
                     <label>Date</label>
-                    <input type="date" min="2019-01-01" max="2022-12-31" value={enteredDate} onChange={dateChangeHandler} />
+                    <input type="date" value={enteredDate} onChange={dateChangeHandler} />
+                </div>
+                <div className="new-operation__control">
+                    <label>Category</label>
+                    <input type="text" value={enteredCategory}
+                        onChange={categoryChangeHandler} />
                 </div>
                 <div className="new-operation__radio" >
                     <label>Type</label>
@@ -69,6 +98,7 @@ const OperationForm = (props) => {
             </div>
             <div className="new-operation__actions">
                 <button type="submit">Add Operation</button>
+                <button onClick={props.onCancel}>Cancel</button>
             </div>
         </form>
     )

@@ -2,14 +2,14 @@ const bcrypt = require('bcrypt');
 const Operation = require("../models/Operation")
 
 module.exports = (sequelize, DataTypes) => {
-    const User = sequelize.define("User", {
+    const User = sequelize.define('User', {
         username: {
             type: DataTypes.STRING,
             allowNull: true,
             validate: {
                 len: {
                     args: [3, 50],
-                    msg: 'The username must contain a minimum of 2 characters'
+                    message: 'The username must contain a minimum of 2 characters'
                 }
             }
         },
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             required: true,
             validate: {
                 isEmail: {
-                    msg: 'The email must be a valid email'
+                    message: 'The email must be a valid email'
                 }
             },
             allowNull: false,
@@ -30,11 +30,11 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 len: {
                     args: [6, 30],
-                    msg: 'The password must have a minimum of 6 characters'
+                    message: 'The password must have a minimum of 6 characters'
                 }
             },
-
         },
+
     },
         {
             hooks: {
@@ -49,17 +49,27 @@ module.exports = (sequelize, DataTypes) => {
                     }
                 }
             }
+        },
+        {
+            tableName: "users"
         }
     );
-    User.validPassword = async (password, hash) => {
-        return await bcrypt.compareSync(password, hash);
+
+    User.validPassword = (password, hash) => {
+        return bcrypt.compareSync(password, hash);
     }
 
     User.associate = (models) => {
         User.hasMany(models.Operation,
             {
-                as: "operations", foreignKey: "userId",
-                onDelete: "cascade"
+                as: "operations", foreignKey: "userId"
+            });
+    };
+
+    User.associate = (models) => {
+        User.hasMany(models.Category,
+            {
+                as: "categories", foreignKey: "userId"
             });
     };
 
