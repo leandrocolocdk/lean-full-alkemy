@@ -1,22 +1,29 @@
 const express = require("express");
 const router = express.Router();
-const { Operations } = require("../models");
+const { Operation } = require("../models");
 
-router.get("/", async (req, res) => {
-    const listOfOperations = await Operations.findAll();
-    res.json(listOfOperations);
-});
+const { auth, verifyOwnerCreate } = require("../middleware/auth")
+const { verifyOwnerRUD } = require("../middleware/auth")
+const operationController = require("../controllers/OperationController")
 
-router.get("/:id", async (req, res) => {
-    const id = req.params.id;
-    const operation = await Operations.findByPk(id);
-    res.json(operation);
-});
+router.use(auth)
+router.get("/", operationController.getAll);
+router.post("/", verifyOwnerCreate, operationController.create);
 
-router.post("/", async (req, res) => {
-    const operation = req.body;
-    await Operations.create(operation);
-    res.json(operation);
-});
+router.get("/:id", operationController.findOne);
+
+router.put("/:id", operationController.update);
+
+router.delete("/:id", operationController.delete);
+
+// Todas las operaciones del usuario === userId
+// router.get("/user/:userId", operationController.getOperationsByUser);
+
+
+// router.get("/user/:userId", operationController.getAllByUser);
+
+// router.get("/:UserId", operationController.findOne);
+
+// router.get("/user/:id", operationController.findOneByUser);
 
 module.exports = router;
