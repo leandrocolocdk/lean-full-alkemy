@@ -1,22 +1,16 @@
 import './App.css';
-import axios from 'axios';
-import { useEffect, useState } from "react"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Home from './pages/Home'
 
-function App() {
-  const [listOfOperations, setListOfOperations] = useState([]);
+const App = () => {
 
-  useEffect(() => {
-
-    axios.get("http://localhost:3001/operations").then(response => {
-      console.log(response.data);
-      setListOfOperations(response.data)
-    })
-  }, []);
   return (
     <div className="App">
-      {listOfOperations.map((value, key) => {
-        return <div>{value.concept}</div>;
-      })}
+      <Router>
+        <Switch>
+          <Route path="/" exact component={Home} />
+        </Switch>
+      </Router>
     </div>
   );
 }
