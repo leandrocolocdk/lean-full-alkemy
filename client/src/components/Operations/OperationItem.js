@@ -14,16 +14,23 @@ const OperationItem = (props) => {
                 <div className="operation-item__price" >{props.type === "egress" ? '-' : ''} ${props.amount}
                 </div>
             </div>
-            <div className="operation-item__action">
-                <button onClick={() => props.onItemEdit(props.id,
-                    props.concept,
-                    props.amount,
-                    props.date,
-                    props.type,
-                    props.category,
-                )}> Edit</button>
-                <button onClick={() => props.onItemRemove(props.id)} >Delete</button>
+            <div>
+                <div className="operation-item__action">
+                    <button onClick={() => props.onItemEdit(props.id,
+                        props.concept,
+                        props.amount,
+                        props.date,
+                        props.type,
+                        props.category,
+                    )}> Edit</button>
+
+                </div>
+                <div className="operation-item__action">
+                    <button onClick={() => props.onItemRemove(props.id)} >Delete</button>
+
+                </div>
             </div>
+
 
         </Card>
     );

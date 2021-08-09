@@ -10,7 +10,6 @@ const ListOperationPage = () => {
     "id": "", "concept": "", "date": "", "amount": "", "type": "", "category": ""
   })
 
-
   const addOperationHandler = (operation) => {
     setListOfOperations(prevOperations => {
       return [operation, ...prevOperations]
@@ -18,24 +17,20 @@ const ListOperationPage = () => {
     })
   }
 
-  // const onItemEdit = (id, concept, amount, date, type, category) => {
-  //   console.log({ id, concept, date, amount, category })
-  //   let opEdit = { id: id, concept: concept, date, amount, type, category }
-  //   setOperationEdit(opEdit)
-  //   console.log("opEd Home", operationEdit)
+  const saveEditOperationDataHandler = (operation) => {
+    console.log(operation)
+    const arrayEdit = listOfOperations.map(item => (
+      item.id === operation.id ? { id: item.id, concept: item.concept, date: item.date, amount: item.amount, type: item.type, category: item.category } : item
+    ))
+    setListOfOperations(arrayEdit)
+  }
 
-  // }
   function onItemEdit(id, concept, amount, date, type, category) {
     // console.log({ id, concept, date, amount, category })
     let opEdit = { id, concept, amount, date, type, category }
     setOperationEdit(opEdit)
     // console.log("opEd Home", operationEdit)
   }
-
-  // useEffect(() => {
-
-  // }, [operationEdit]);
-
 
   const onItemRemove = (id) => {
     console.log(id)
@@ -50,7 +45,7 @@ const ListOperationPage = () => {
 
   function deleteOperationsData(id) {
     try {
-      axiosInstance.delete(`http://localhost:3001/api/v1/operations/${id}`)
+      axiosInstance.delete(`http://localhost:3001/api/v1/operations/${id}`,)
         .then(response => {
           console.log(response.data)
         })
@@ -72,7 +67,7 @@ const ListOperationPage = () => {
 
   function getOperationsData() {
     try {
-      axiosInstance.get("http://localhost:3001/api/v1/operations")
+      axiosInstance.get("http://localhost:3001/api/v1/operations/")
         .then(response => {
           setListOfOperations(response.data)
         })
@@ -94,12 +89,13 @@ const ListOperationPage = () => {
         editOperation={operationEdit}
       />
 
+
       <Operations
         items={listOfOperations}
         // categories={category}
         onItemEdit={onItemEdit}
         onItemRemove={onItemRemove}
-
+        onEditOperation={saveEditOperationDataHandler}
       />
     </div>
   );

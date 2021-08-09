@@ -1,6 +1,6 @@
 // import './Home.css';
 import { useEffect, useState } from "react"
-import Operations2 from '../components/Operations/Operations'
+import Operations from '../components/Operations/Operations'
 import axiosInstance from '../services/axios';
 
 const Home = () => {
@@ -16,7 +16,7 @@ const Home = () => {
                 axiosInstance.get("http://localhost:3001/api/v1/operations/ten")
                     .then(response => {
                         setLastTen(response.data)
-                        console.log(response.data)
+                        // console.log(response.data)
                     })
                     .catch((error) => {
                         console.log(error)
@@ -26,15 +26,12 @@ const Home = () => {
                 // setError(error)
             }
         }
-
-
         getUltimateOperations()
     }, []);
 
     axiosInstance.get("http://localhost:3001/api/v1/operations")
         .then(response => {
             // setListOfOperations(response.data)
-
             let sum = 0
             for (const key in response.data) {
                 if (response.data[key].type === "entry") {
@@ -54,7 +51,7 @@ const Home = () => {
     return (
         <div className="Home">
             <h2 >Welcome , your balance is {sum}</h2>
-            <Operations2 items={lastTen} />
+            <Operations items={lastTen} />
         </div>
     );
 }

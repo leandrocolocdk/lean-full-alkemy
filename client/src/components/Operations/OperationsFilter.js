@@ -1,11 +1,15 @@
 
-// import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // import axiosInstance from '../services/axios';
 import './OperationsFilter.css';
 
 const OperationsFilter = (props) => {
+    const [enteredCategory, setEnteredCategory] = useState('')
 
     const categoryChangeHandler = (event) => {
+        // console.log(event.target.value)
+        setEnteredCategory(event.target.value)
+        setEnteredCategory(enteredCategory)
         props.onChangeFilter(event.target.value)
     }
 
@@ -13,14 +17,13 @@ const OperationsFilter = (props) => {
         <div>
             <div className='operations-filter'>
                 <div className='operations-filter__control'>
-                    <label>Category</label>
-                    {/* <input
+                    <label>Filter by Category</label>
+                    <input
                         type="text"
-                        onChange={categoryChangeHandler} >
-                        {props.categories.map(item => (
-                            <option key={item.id} value={item.name}>{item.name}</option>
-                        ))}
-                    </input> */}
+                        value={enteredCategory}
+                        onChange={categoryChangeHandler}
+                    >
+                    </input>
 
                 </div>
 

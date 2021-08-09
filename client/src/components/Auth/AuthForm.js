@@ -9,6 +9,7 @@ const AuthForm = () => {
   const history = useHistory();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
+  const passwordConfirmInputRef = useRef();
 
   const authCtx = useContext(AuthContext);
 
@@ -24,6 +25,7 @@ const AuthForm = () => {
 
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
+    const enteredPasswordConfirm = passwordConfirmInputRef.current.value;
 
     // optional: Add validation
     try {
@@ -39,6 +41,7 @@ const AuthForm = () => {
       await axiosInstance.post(url, {
         email: enteredEmail,
         password: enteredPassword,
+        passwordConfirm: enteredPasswordConfirm,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -48,13 +51,18 @@ const AuthForm = () => {
           if (response.status === 200) {
 
             const expirationTime = new Date(
-              new Date().getTime() + +36000 * 1000
+              new Date().getTime() + +3600000
             );
-            // console.log(response.data)
+            console.log(response.data)
+            console.log("expirationTime", expirationTime)
+
             authCtx.login(response.data.token, expirationTime.toISOString());
             history.replace('/');
 
-          } else {
+          } if (response === 201) {
+            console.log("User registered!")
+          }
+          else {
 
             console.log(response.error)
             throw new Error('Authentication failed!');
@@ -86,6 +94,15 @@ const AuthForm = () => {
             id='password'
             required
             ref={passwordInputRef}
+          />
+        </div>
+        <div className={classes.control}>
+          <label htmlFor='password'>Password Confirm</label>
+          <input
+            type='password'
+            id='passwordConfirm'
+            required
+            ref={passwordConfirmInputRef}
           />
         </div>
         <div className={classes.actions}>

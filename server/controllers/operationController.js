@@ -1,6 +1,6 @@
 const { sequelize, DataTypes } = require('sequelize');
 const { Op } = require("sequelize");
-
+const { QueryTypes } = require('sequelize');
 const { Operation, User } = require("../models");
 
 module.exports = {
@@ -30,15 +30,17 @@ module.exports = {
     async findAll(req, res) {
         try {
             //// ver esto
-            // let category, type;
+            let category, type;
             // category ? req.query.category : "";
-            // type ? req.query.type : ""
+            // type ? req.query.type : null
             const { userId } = req.user
             // console.log(userId, category, type)
 
             let operations = await Operation.findAll({
                 where: {
-                    userId: userId
+                    userId: userId,
+                    // type: req.query.type,
+                    // category: req.query.category
                 },
                 order: [
                     ['id', 'DESC']
@@ -171,33 +173,30 @@ module.exports = {
             res.status(500).json({ message: "Something was wrong.", });
         }
     },
-
+    // const { QueryTypes } = require('sequelize');
+    // const users = await sequelize.query("SELECT * FROM `users`", { type: QueryTypes.SELECT });
+    /////////////////////////////////////// not founddddddddddd
     async egress(req, res) {
         try {
             const { userId } = req.user
-            let operations = await Operation.findAll(
-                {
-                    where: {
-                        userId: userId,
-                        type: "egress",
+            // let operations = await Operation.findAll(
+            //     {
+            //         where: {
+            //             // userId: userId,
+            //             // type: "egress",
 
-                        // [Op.and]: [
-                        //     {
-                        //         userId: userId
-                        //     },
-                        //     { type: "egress" }
-                        // ]
-                    },
-                }
-            );
+            //             [Op.and]: [
+            //                 {
+            //                     userId: userId
+            //                 },
+            //                 //     { type: "egress" }
+            //             ]
+            //         },
+            //     }
+            // );
+            const operations = await sequelize.query("SELECT `id`, `concept`, `amount`, `date`, `type`, `category`, `userId` FROM `Operations` AS `Operation` WHERE (`Operation`.`type` = 'egress' AND `Operation`.`userId` = userId", { type: QueryTypes.SELECT })
 
-            // where: {
-            //     rank: {
-            //       [Op.or]: {
-            //         [Op.lt]: 1000,
-            //         [Op.eq]: null
-            //       }
-            //     },
+
             if (!operations) {
                 res.json({ message: "The operation was not found" });
             } else {
@@ -221,6 +220,73 @@ module.exports = {
                     }
                 },
             );
+
+            if (!operations) {
+                res.json({ message: "The operation was not found" });
+            } else {
+                res.json(operations)
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({
+                message:
+                    "Something was wrong.",
+            });
+        }
+    },
+
+    async findAllEntry(req, res) {
+        try {
+            //// ver esto
+            let category, type;
+            // category ? req.query.category : "";
+            // type ? req.query.type : null
+            const { userId } = req.user
+            console.log(userId, category, type)
+
+            let operations = await Operation.findAll({
+                where: {
+                    userId: userId,
+                    type: "entry",
+                    // category: req.query.category
+                },
+                order: [
+                    ['id', 'DESC']
+                ]
+            });
+
+            if (!operations) {
+                res.json({ message: "The operation was not found" });
+            } else {
+                res.json(operations)
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({
+                message:
+                    "Something was wrong.",
+            });
+        }
+    },
+    async findAllEgress(req, res) {
+        try {
+            //// ver esto
+            // let category, type;
+            // category ? req.query.category : "";
+            // type ? req.query.type : null
+            const { userId } = req.user
+            console.log(userId, category, type)
+
+            let operations = await Operation.findAll({
+                where: {
+                    userId: userId,
+                    type: "egress",
+                    // category: req.query.category
+                },
+                order: [
+                    ['id', 'DESC']
+                ]
+            });
 
             if (!operations) {
                 res.json({ message: "The operation was not found" });

@@ -13,8 +13,9 @@ router.get("/ten", operationController.findLastTen);
 router.get("/:id", operationController.findOne);
 router.post("/", operationController.create);
 
-router.get("/egress", operationController.egress);//cambiar el controlador
-router.get("/entry", operationController.entry);
+router.get("/findAllEgress/", operationController.findAllEgress);
+//no anda entra en el find all
+router.get("/findAllEntry", operationController.findAllEntry);
 
 router.put("/:id", operationController.update);
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import OperationForm from '../newOperation/OperationForm';
+import OperationFormEdit from '../newOperation/OperationFormEdit';
 import './NewOperation.css';
 
 const NewOperation = (props) => {
@@ -12,32 +13,36 @@ const NewOperation = (props) => {
         // setIsEditing(false);//cerrar el formulario al agregar ops
     };
 
-    // console.log("id desde new Op:", props.editOperation)
-    // console.log("id desde new Op:", props.editOperation.amount)
-    // console.log("id desde new Op:", props.editOperation.type)
+    // const onSaveEditOperationData = (editedOperationData) => {
+    //     props.onEditOperation(editedOperationData.data);
+
+    // setIsEditing(false);//cerrar el formulario al agregar ops
+    // };
 
     // const startEditingHandler = () => {
     //     setIsEditing(true);
     // };
 
-    // const stopEditingHandler = () => {
-    //     setIsEditing(false);
-    // };
+    const stopEditingHandler = () => {
+        setIsEditing(false);
+    };
 
     return (
         <div className='new-operation'>
-            {/* {!isEditing && (
-                <button onClick={startEditingHandler}>Add New Operation</button>
-            )} */}
-            {/* {isEditing && ( */}
-            <OperationForm
-                onSaveOperationData={saveOperationDataHandler}
-                // onCancel={stopEditingHandler}
 
-                editOperation={props.editOperation}
+            {props.editOperation.id ? (
+                <OperationFormEdit
+                    onSaveEditOperationData={props.onEditOperationDataHnadler}
+                    editOperation={props.editOperation}
+                    onClick={stopEditingHandler}
+                />
+            ) : (
+                <OperationForm
+                    onSaveOperationData={saveOperationDataHandler}
+                    onClick={stopEditingHandler}
+                />
+            )}
 
-            />
-            {/* )} */}
         </div>
     );
 };

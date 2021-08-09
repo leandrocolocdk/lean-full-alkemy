@@ -17,16 +17,21 @@
     flex: 1;
 }
 
+.operation-item__action {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 5px;
+}
 .operation-item__action button{
   background: none;
-  color: inherit;
+  color: white;
   /* border: none; */
-  padding: 0;
+  /* padding: 0; */
+
   /* font: inherit; */
   cursor: pointer;
-  outline: inherit;
+  /* outline: inherit; */
 }
-  
 
 
 .operation-item h4 {
