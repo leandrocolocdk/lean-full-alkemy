@@ -4,32 +4,35 @@ import Operations from '../components/Operations/Operations'
 import NewOperation from '../components/Operations/newOperation/NewOperation';
 import axiosInstance from '../services/axios';
 
+const initialOperation = {
+  "id": "", "concept": "", "date": "", "amount": "", "type": "", "category": ""
+}
+const ListOperationPage = (props) => {
+  const [operationEdit, setOperationEdit] = useState(initialOperation)
 
-const ListOperationPage = () => {
-  const [operationEdit, setOperationEdit] = useState({
-    "id": "", "concept": "", "date": "", "amount": "", "type": "", "category": ""
-  })
+  const [listOfOperations, setListOfOperations] = useState([]);
+  // const [error, setError] = useState('');
 
-  const addOperationHandler = (operation) => {
-    setListOfOperations(prevOperations => {
-      return [operation, ...prevOperations]
-      // hace la magia! recibe de new Operation
-    })
-  }
 
-  const saveEditOperationDataHandler = (operation) => {
+  let addOperationHandler = async (operation) => {
     console.log(operation)
-    const arrayEdit = listOfOperations.map(item => (
-      item.id === operation.id ? { id: item.id, concept: item.concept, date: item.date, amount: item.amount, type: item.type, category: item.category } : item
-    ))
-    setListOfOperations(arrayEdit)
+    await axiosInstance.post("http://localhost:3001/api/v1/operations", operation)
+      .then(response => {
+        console.log("response add", response.data)
+        // llamar a toast
+        setListOfOperations(prevOperations => {
+          return [response.data.data, ...prevOperations]
+        })
+      })
   }
 
-  function onItemEdit(id, concept, amount, date, type, category) {
-    // console.log({ id, concept, date, amount, category })
-    let opEdit = { id, concept, amount, date, type, category }
-    setOperationEdit(opEdit)
-    // console.log("opEd Home", operationEdit)
+  const updated = (operation) => {
+    console.log("ooperation edited", operation)
+    const arrayEdit = listOfOperations.map(item => (
+      item.id === operation.id ? operation : item
+    ))
+
+    setListOfOperations(arrayEdit)
   }
 
   const onItemRemove = (id) => {
@@ -58,8 +61,6 @@ const ListOperationPage = () => {
     }
   }
 
-  const [listOfOperations, setListOfOperations] = useState([]);
-  // const [error, setError] = useState('');
 
   useEffect(() => {
     getOperationsData()
@@ -86,16 +87,24 @@ const ListOperationPage = () => {
     <div className="ListOperationPage">
       <NewOperation
         onAddOperation={addOperationHandler}
-        editOperation={operationEdit}
+
+        operationEdit={operationEdit}//objeto
+        setOperationEdit={setOperationEdit}//funcion
+        updated={updated}
+      // onItemEdit={props.onItemEdit}
+
+      // editOperation={operationEdit}//viene del item
       />
 
 
       <Operations
         items={listOfOperations}
-        // categories={category}
-        onItemEdit={onItemEdit}
+
+
+        // onItemEdit={onItemEdit}// llega el item completo
+        setOperationEdit={setOperationEdit}
         onItemRemove={onItemRemove}
-        onEditOperation={saveEditOperationDataHandler}
+      // onEditOperation={saveEditOperationDataHandler}//con formulario editado
       />
     </div>
   );

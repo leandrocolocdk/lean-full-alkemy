@@ -16,13 +16,17 @@ const OperationItem = (props) => {
             </div>
             <div>
                 <div className="operation-item__action">
-                    <button onClick={() => props.onItemEdit(props.id,
-                        props.concept,
-                        props.amount,
-                        props.date,
-                        props.type,
-                        props.category,
-                    )}> Edit</button>
+                    <button onClick={() => {
+                        props.setOperationEdit({
+                            id: props.id,
+                            concept: props.concept,
+                            amount: props.amount,
+                            date: props.date,
+                            type: props.type,
+                            category: props.category
+                        })
+                    }}//debe legar al formulario
+                    > Edit</button>
 
                 </div>
                 <div className="operation-item__action">

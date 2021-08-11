@@ -14,6 +14,7 @@ const OperationsList = (props) => {
                 props.items.map((operation) => (
                     <OperationItem
                         key={operation.id}
+
                         id={operation.id}
                         concept={operation.concept}
                         amount={operation.amount}
@@ -21,7 +22,7 @@ const OperationsList = (props) => {
                         type={operation.type}
                         category={operation.category}
 
-                        onItemEdit={props.onItemEdit}
+                        setOperationEdit={props.setOperationEdit}
                         onItemRemove={props.onItemRemove}
                     />
                 )) :

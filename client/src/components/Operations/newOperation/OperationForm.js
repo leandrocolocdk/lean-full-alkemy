@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import './OperationForm.css'
-import axiosInstance from '../../../services/axios'
 
 const OperationForm = (props) => {
     const [enteredConcept, setEnteredConcept] = useState('')
@@ -9,7 +8,8 @@ const OperationForm = (props) => {
     const [enteredType, setEnteredType] = useState('')
     const [enteredCategory, setEnteredCategory] = useState('')
 
-    // console.log("desde form", props.editOperation)
+    console.log("desde form", props.editOperation)
+
 
     const conceptChangeHandler = (event) => {
         setEnteredConcept(event.target.value)
@@ -45,15 +45,11 @@ const OperationForm = (props) => {
             concept: enteredConcept,
             amount: enteredAmount,
             date: new Date(enteredDate),
-            // type: enteredType,
+            type: enteredType,
             category: enteredCategory
         }
-        // console.log(operationData)
-        await axiosInstance.post("http://localhost:3001/api/v1/operations", operationData)
-            .then(response => {
-                console.log("response edit", response.message)
-                props.onSaveOperationData(response.data);
-            })
+
+        props.onCreateOperationData(operationData);
 
         setEnteredConcept('');
         setEnteredDate('');

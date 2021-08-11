@@ -8,20 +8,21 @@ const NewOperation = (props) => {
 
 
     const saveOperationDataHandler = (enteredOperationData) => {
-        props.onAddOperation(enteredOperationData.data);
+        console.log("enteredData", enteredOperationData)
+        props.onAddOperation(enteredOperationData);
 
-        // setIsEditing(false);//cerrar el formulario al agregar ops
+        setIsEditing(false);//cerrar el formulario al agregar ops
     };
 
-    // const onSaveEditOperationData = (editedOperationData) => {
-    //     props.onEditOperation(editedOperationData.data);
+    const onSaveEditOperationData = (editedOperationData) => {
+        //     props.onEditOperation(editedOperationData.data);
 
-    // setIsEditing(false);//cerrar el formulario al agregar ops
-    // };
+        setIsEditing(false);//cerrar el formulario al agregar ops
+    };
 
-    // const startEditingHandler = () => {
-    //     setIsEditing(true);
-    // };
+    const startEditingHandler = () => {
+        setIsEditing(true);
+    };
 
     const stopEditingHandler = () => {
         setIsEditing(false);
@@ -29,20 +30,22 @@ const NewOperation = (props) => {
 
     return (
         <div className='new-operation'>
+            {props.operationEdit.id ? (
 
-            {props.editOperation.id ? (
                 <OperationFormEdit
-                    onSaveEditOperationData={props.onEditOperationDataHnadler}
-                    editOperation={props.editOperation}
-                    onClick={stopEditingHandler}
+                    operationEdit={props.operationEdit}//objeto
+                    setOperationEdit={props.setOperationEdit}//funcion
+                    updated={props.updated}//editado
+
                 />
             ) : (
                 <OperationForm
-                    onSaveOperationData={saveOperationDataHandler}
+                    onCreateOperationData={saveOperationDataHandler}
+
                     onClick={stopEditingHandler}
                 />
-            )}
-
+            )
+            }
         </div>
     );
 };

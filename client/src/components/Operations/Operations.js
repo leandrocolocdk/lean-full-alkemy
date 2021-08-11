@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 // import "../components/Operations/Operations.css"
 import Card from "../../UI/Card"
 import OperationsList from './OperationsList';
-import OperationsFilter from '../Operations/OperationsFilter';
-import axiosInstance from '../../services/axios';
+// import OperationsFilter from '../Operations/OperationsFilter';
+// import axiosInstance from '../../services/axios';
 
 
 const Operations = (props) => {
@@ -49,7 +49,8 @@ const Operations = (props) => {
                 {/* onEditHandler={onEditItemHandler}  */}
                 <OperationsList
                     items={props.items}
-                    onItemEdit={props.onItemEdit}
+                    //
+                    setOperationEdit={props.setOperationEdit}
                     onItemRemove={props.onItemRemove}
                 />
             </Card>

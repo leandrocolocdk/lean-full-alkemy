@@ -1,102 +1,104 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './OperationForm.css'
-import axiosInstance from '../../../services/axios'
 
+const initailForm = {
+    id: null,
+    concept: "",
+    date: "",
+    amount: "",
+    type: "",
+    category: "",
+};
 const OperationFormEdit = (props) => {
-    const [enteredConcept, setEnteredConcept] = useState(props.editOperation.concept || '')
-    const [enteredDate, setEnteredDate] = useState(new Date(props.editOperation.date).toISOString().split('T')[0] || '')
-    const [enteredAmount, setEnteredAmount] = useState(props.editOperation.amount || '')
-    const [enteredType, setEnteredType] = useState(props.editOperation.type || '')
-    const [enteredCategory, setEnteredCategory] = useState(props.editOperation.category || '')
+    const [form, setForm] = useState(props.operationEdit);
+
+    console.log(props.operationEdit)
+    // const [enteredConcept, setEnteredConcept] = useState(props.operationEdit.concept || '')
+    // const [enteredDate, setEnteredDate] = useState(new Date(props.operationEdit.date).toISOString().split('T')[0] || '')
+    // const [enteredDate, setEnteredDate] = useState('')
+    // const [enteredAmount, setEnteredAmount] = useState(props.operationEdit.amount || '')
+    // const [enteredType, setEnteredType] = useState(props.operationEdit.type || '')
+    // const [enteredCategory, setEnteredCategory] = useState(props.operationEdit.category || '')
+
+    const handleChange = (event) => {
+        const { name, value } = event.target
+        setForm({
+            ...form,
+            [name]: value,
+            // [e.target.date]: e.target.value,
+            // [e.target.amount]: e.target.value,
+            // [e.target.type]: e.target.value,
+            // [e.target.category]: e.target.value,
+            // [name.date]: value.toISOString().split('T')[0],
+        });
+        console.log(name.date)
+        console.log(event.target.value)
+    };
+
+    useEffect(() => {
+        //   if (props.operationEdit) {
+        setForm(props.operationEdit);
+        //   } else {
+        //       setForm(initailForm);
+        //   }
+    }, [props.operationEdit]);
 
 
-    const conceptChangeHandler = (event) => {
-        setEnteredConcept(event.target.value)
-    }
 
-    const dateChangeHandler = (event) => {
-        setEnteredDate(event.target.value)
-    }
-
-    const amountChangeHandler = (event) => {
-        setEnteredAmount(event.target.value)
-    }
-    const typeChangeHandler = (event) => {
-        setEnteredType(event.target.value)
-    }
-    const categoryChangeHandler = (event) => {
-        setEnteredCategory(event.target.value)
-    }
-
-    const submitHandler = async (event) => {
+    const submitHandler = (event) => {
         event.preventDefault();
 
-        //validar entradas
-        if (!enteredConcept
-            || !enteredDate
-            || !enteredAmount
-            || !enteredType
 
-        ) return
+        // if (!enteredConcept
+        //     || !enteredDate
+        //     || !enteredAmount
+        //     || !enteredType
+
+        // ) return
+
+        props.updated(form)
+        handleReset()
 
 
-        const operationData = {
-            concept: enteredConcept,
-            amount: enteredAmount,
-            date: new Date(enteredDate),
-            // type: enteredType,
-            category: enteredCategory
-        }
-        // console.log(operationData)
-        await axiosInstance.put(`http://localhost:3001/api/v1/operations/${props.editOperation.id}`, operationData)
-            .then(response => {
-                console.log(response.data)
-                props.onSaveEditOperationData(response.data);
-            })
-            .catch(error => {
-                console.log(error)
-            })
-
-        setEnteredConcept('');
-        setEnteredDate('');
-        setEnteredAmount('');
-        setEnteredType('');
-        setEnteredCategory('');
     }
+    const handleReset = (e) => {
+        setForm(initailForm);
+        props.operationEdit.id = null
+    };
 
     return (
         <form onSubmit={submitHandler}>
             <div className='new-operation__controls'>
                 <div className="new-operation__control">
                     <label>Concept</label>
-                    <input type="text" value={enteredConcept}
-                        onChange={conceptChangeHandler} />
+                    <input type="text" value={form.concept} name="concept"
+                        onChange={handleChange} />
                 </div>
 
                 <div className="new-operation__control">
                     <label>Amount</label>
-                    <input type="number" min="0.01" step="0.01" value={enteredAmount} onChange={amountChangeHandler} />
+                    <input type="number" min="0.01" step="0.01" value={form.amount} onChange={handleChange} name="amount" />
                 </div>
                 <div className="new-operation__control">
                     <label>Date</label>
                     <input type="date"
-                        value={enteredDate} onChange={dateChangeHandler} />
+                        value={form.date} onChange={handleChange} name="date" />
                 </div>
                 <div className="new-operation__control">
                     <label>Category</label>
-                    <input type="text" value={enteredCategory}
-                        onChange={categoryChangeHandler} />
+                    <input type="text" value={form.category} name="category"
+                        onChange={handleChange} />
                 </div>
                 <div className="new-operation__radio" >
                     <label>Type (Disabled)</label>
-                    <input disabled type="radio" value="egress" checked={enteredType === 'egress'} onChange={typeChangeHandler} />Egress
-                    <input disabled type="radio" value="entry" checked={enteredType === 'entry'} onChange={typeChangeHandler} />Entry
+                    <input disabled type="radio" value="egress" checked={form.type === 'egress'} onChange={handleChange} />Egress
+                    <input disabled type="radio" value="entry" checked={form.type === 'entry'} onChange={handleChange} />Entry
                 </div>
 
             </div>
             <div className="new-operation__actions">
                 <button type="submit">Edit Operation</button>
-                <button onClick={props.onCancel}>Cancel</button>
+                <button onClick={handleReset}>Cancel</button>
             </div>
         </form>
     )
