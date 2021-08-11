@@ -47,8 +47,6 @@ const OperationFormEdit = (props) => {
 
     const submitHandler = (event) => {
         event.preventDefault();
-
-
         // if (!enteredConcept
         //     || !enteredDate
         //     || !enteredAmount

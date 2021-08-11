@@ -15,24 +15,31 @@ const ListOperationPage = (props) => {
 
 
   let addOperationHandler = async (operation) => {
-    console.log(operation)
+    // console.log(operation)
     await axiosInstance.post("http://localhost:3001/api/v1/operations", operation)
       .then(response => {
-        console.log("response add", response.data)
         // llamar a toast
         setListOfOperations(prevOperations => {
           return [response.data.data, ...prevOperations]
         })
       })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
-  const updated = (operation) => {
-    console.log("ooperation edited", operation)
-    const arrayEdit = listOfOperations.map(item => (
-      item.id === operation.id ? operation : item
-    ))
+  const updated = async (operation) => {
+    await axiosInstance.put(`http://localhost:3001/api/v1/operations/${operation.id}`, operation)
+      .then(() => {
+        const arrayEdit = listOfOperations.map(item => (
+          item.id === operation.id ? operation : item
+        ))
 
-    setListOfOperations(arrayEdit)
+        setListOfOperations(arrayEdit)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   const onItemRemove = (id) => {
