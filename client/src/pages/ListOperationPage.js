@@ -14,7 +14,7 @@ const ListOperationPage = (props) => {
   // const [error, setError] = useState('');
 
 
-  let addOperationHandler = async (operation) => {
+  let operationCreate = async (operation) => {
     // console.log(operation)
     await axiosInstance.post("http://localhost:3001/api/v1/operations", operation)
       .then(response => {
@@ -93,14 +93,11 @@ const ListOperationPage = (props) => {
     // si hay id es edit, entonces activar componenteeditar.
     <div className="ListOperationPage">
       <NewOperation
-        onAddOperation={addOperationHandler}
+        operationCreate={operationCreate}
 
         operationEdit={operationEdit}//objeto
         setOperationEdit={setOperationEdit}//funcion
         updated={updated}
-      // onItemEdit={props.onItemEdit}
-
-      // editOperation={operationEdit}//viene del item
       />
 
 

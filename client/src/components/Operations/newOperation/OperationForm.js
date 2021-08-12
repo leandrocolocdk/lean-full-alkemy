@@ -8,9 +8,6 @@ const OperationForm = (props) => {
     const [enteredType, setEnteredType] = useState('')
     const [enteredCategory, setEnteredCategory] = useState('')
 
-    console.log("desde form", props.editOperation)
-
-
     const conceptChangeHandler = (event) => {
         setEnteredConcept(event.target.value)
     }
@@ -40,7 +37,6 @@ const OperationForm = (props) => {
 
         ) return
 
-
         const operationData = {
             concept: enteredConcept,
             amount: enteredAmount,
@@ -49,7 +45,7 @@ const OperationForm = (props) => {
             category: enteredCategory
         }
 
-        props.onCreateOperationData(operationData);
+        props.operationCreate(operationData);
 
         setEnteredConcept('');
         setEnteredDate('');

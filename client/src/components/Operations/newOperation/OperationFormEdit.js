@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './OperationForm.css'
 
-const initailForm = {
+const initialForm = {
     id: null,
     concept: "",
     date: "",
@@ -12,55 +12,48 @@ const initailForm = {
 const OperationFormEdit = (props) => {
     const [form, setForm] = useState(props.operationEdit);
 
-    console.log(props.operationEdit)
-    // const [enteredConcept, setEnteredConcept] = useState(props.operationEdit.concept || '')
-    // const [enteredDate, setEnteredDate] = useState(new Date(props.operationEdit.date).toISOString().split('T')[0] || '')
-    // const [enteredDate, setEnteredDate] = useState('')
-    // const [enteredAmount, setEnteredAmount] = useState(props.operationEdit.amount || '')
-    // const [enteredType, setEnteredType] = useState(props.operationEdit.type || '')
-    // const [enteredCategory, setEnteredCategory] = useState(props.operationEdit.category || '')
-
     const handleChange = (event) => {
         const { name, value } = event.target
+
         setForm({
             ...form,
-            [name]: value,
-            // [e.target.date]: e.target.value,
-            // [e.target.amount]: e.target.value,
-            // [e.target.type]: e.target.value,
-            // [e.target.category]: e.target.value,
-            // [name.date]: value.toISOString().split('T')[0],
+            [name]: value
         });
-        console.log(name.date)
-        console.log(event.target.value)
+
     };
 
     useEffect(() => {
-        //   if (props.operationEdit) {
-        setForm(props.operationEdit);
-        //   } else {
-        //       setForm(initailForm);
-        //   }
+        if (props.operationEdit) {
+
+            let dateFormat = (props.operationEdit.date).split('T')[0]
+            setForm({
+                id: props.operationEdit.id,
+                concept: props.operationEdit.concept,
+                date: dateFormat,
+                amount: props.operationEdit.amount,
+                type: props.operationEdit.type,
+                category: props.operationEdit.category
+            });
+
+        } else {
+            setForm(initialForm);
+        }
     }, [props.operationEdit]);
-
-
 
     const submitHandler = (event) => {
         event.preventDefault();
-        // if (!enteredConcept
-        //     || !enteredDate
-        //     || !enteredAmount
-        //     || !enteredType
-
-        // ) return
+        if (!form.concept || !form.category || !form.type
+            || !form.amount || !form.date) {
+            alert("Fill in all the fields")
+            return
+        }
 
         props.updated(form)
         handleReset()
-
-
     }
-    const handleReset = (e) => {
-        setForm(initailForm);
+
+    const handleReset = () => {
+        setForm(initialForm);
         props.operationEdit.id = null
     };
 
@@ -89,14 +82,16 @@ const OperationFormEdit = (props) => {
                 </div>
                 <div className="new-operation__radio" >
                     <label>Type (Disabled)</label>
-                    <input disabled type="radio" value="egress" checked={form.type === 'egress'} onChange={handleChange} />Egress
-                    <input disabled type="radio" value="entry" checked={form.type === 'entry'} onChange={handleChange} />Entry
+                    <input disabled type="radio" name="egress"
+                        value="egress" checked={form.type === 'egress'} onChange={handleChange} />Egress
+                    <input disabled type="radio" name="entry"
+                        value="entry" checked={form.type === 'entry'} onChange={handleChange} />Entry
                 </div>
 
             </div>
             <div className="new-operation__actions">
                 <button type="submit">Edit Operation</button>
-                <button onClick={handleReset}>Cancel</button>
+                <button type="reset" onClick={handleReset}>Cancel</button>
             </div>
         </form>
     )

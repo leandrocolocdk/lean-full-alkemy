@@ -4,7 +4,6 @@ import Operations from '../components/Operations/Operations'
 import axiosInstance from '../services/axios';
 
 const Home = () => {
-    // const [listOfOperations, setListOfOperations] = useState([]);
     const [lastTen, setLastTen] = useState([]);
     const [sum, setSum] = useState(0);
     // const [error, setError] = useState('');
@@ -31,7 +30,6 @@ const Home = () => {
 
     axiosInstance.get("http://localhost:3001/api/v1/operations")
         .then(response => {
-            // setListOfOperations(response.data)
             let sum = 0
             for (const key in response.data) {
                 if (response.data[key].type === "entry") {
@@ -41,7 +39,7 @@ const Home = () => {
                     sum = sum - response.data[key].amount
                 }
             }
-            setSum(sum)
+            setSum(sum.toFixed(2))
         })
         .catch((error) => {
             // setError(error)
