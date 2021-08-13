@@ -1,7 +1,6 @@
 import './Home.css';
 import { useEffect, useState } from "react"
 import Operations from '../components/Operations/Operations'
-
 import OperationForm from '../components/Operations/newOperation/OperationForm'
 import axiosInstance from '../services/axios';
 import Loader from '../components/Loader'
@@ -76,19 +75,16 @@ const ListOperationPage = (props) => {
 
 
   useEffect(() => {
-
     getOperationsData()
-
   }, []);
 
   function getOperationsData() {
     try {
       setLoading(true)
-      console.log(loading)
       axiosInstance.get("http://localhost:3001/api/v1/operations/")
         .then(response => {
           setListOfOperations(response.data)
-          // setLoading(false)
+          setLoading(false)
         })
         .catch((error) => {
           console.log(error)

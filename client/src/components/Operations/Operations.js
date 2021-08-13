@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 // import "../components/Operations/Operations.css"
 import Card from "../../UI/Card"
 import OperationsList from './OperationsList';
-// import OperationsFilter from '../Operations/OperationsFilter';
+import OperationsFilter from '../Operations/OperationsFilter';
 // import axiosInstance from '../../services/axios';
 
 
 const Operations = (props) => {
     // const [category, setCategory] = useState([])
-    // const [filteredCategory, setFilteredCategory] = useState('')
+    const [filteredCategory, setFilteredCategory] = useState('')
 
     // useEffect(() => {
     //     getCategoryData()
@@ -24,28 +24,30 @@ const Operations = (props) => {
     //     }
     // }
 
-    // const filterChangeHandler = (selectedCategory) => [
-    //     setFilteredCategory(selectedCategory)
-    // ]
+    let filteredOperations
+    //filtra el array, segun lo seleccionado
+    if (filteredCategory === '') {
+        filteredOperations = props.items
+    } else {
+        filteredOperations = props.items.filter(operation => {
+            return operation.category === filteredCategory
+        })
+    }
 
-    //  //filtra el array, segun lo seleccionado
-    // const filteredOperations = props.items.filter(operation => {
-    //     return operation.category === filteredCategory
-    // })
-
-
+    const filterChangeHandler = (selectedCategory) => [
+        setFilteredCategory(selectedCategory)
+    ]
     return (
         <div>
             <Card className="operations">
-                {/* <OperationsFilter
-                    selected={filteredCategory}
-                    onChangeFilter={props.enteredCategory}
-
-
-                /> */}
+                <OperationsFilter
+                    // selected={filteredCategory}//era con dropdown
+                    onChangeFilter={filterChangeHandler}
+                />
 
                 <OperationsList
-                    items={props.items}
+                    // items={props.items}//sin filtro
+                    items={filteredOperations}//con filtro
                     //
                     setOperationEdit={props.setOperationEdit}
                     onItemRemove={props.onItemRemove}
