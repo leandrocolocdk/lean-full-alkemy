@@ -33,10 +33,7 @@ const Operations = (props) => {
     //     return operation.category === filteredCategory
     // })
 
-    // console.log(props.onChangeFilter)
-    // const onItemRemove = (e) => {
-    //     props.onItemRemove(e)
-    // }
+
     return (
         <div>
             <Card className="operations">
@@ -46,7 +43,7 @@ const Operations = (props) => {
 
 
                 /> */}
-                {/* onEditHandler={onEditItemHandler}  */}
+
                 <OperationsList
                     items={props.items}
                     //

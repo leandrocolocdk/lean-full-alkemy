@@ -1,3 +1,43 @@
+
+  .new-operation {
+    background-color: #a892ee;
+    padding: 1rem;
+    margin: 2rem auto;
+    width: 50rem;
+    max-width: 95%;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+  }
+  
+  .new-operation button {
+    font: inherit;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border: 1px solid #40005d;
+    background-color: #40005d;
+    color: white;
+    border-radius: 12px;
+    margin-right: 1rem;
+  }
+  
+  .new-operation button:hover,
+  .new-operation button:active {
+    background-color: #510674;
+    border-color: #510674;
+  }
+  
+  .new-operation button.alternative {
+    color: #220131;
+    border-color: transparent;
+    background-color: transparent;
+  }
+  
+  .new-operation button.alternative:hover,
+  .new-operation button.alternative:active {
+    background-color: #ddb3f8;
+  }
+  
 .new-operation__controls {
     display: flex;
     flex-wrap: wrap;

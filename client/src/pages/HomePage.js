@@ -2,14 +2,17 @@
 import { useEffect, useState } from "react"
 import Operations from '../components/Operations/Operations'
 import axiosInstance from '../services/axios';
+import Error from '../components/Error'
+import Loader from '../components/Loader'
 
 const Home = () => {
     const [lastTen, setLastTen] = useState([]);
     const [sum, setSum] = useState(0);
-    // const [error, setError] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState('');
 
     useEffect(() => {
-
+        setLoading(true)
         function getUltimateOperations() {
             try {
                 axiosInstance.get("http://localhost:3001/api/v1/operations/ten")
@@ -22,10 +25,11 @@ const Home = () => {
                     })
             } catch (error) {
                 console.log(error)
-                // setError(error)
+                setError(error)
             }
         }
         getUltimateOperations()
+        setLoading(false)
     }, []);
 
     axiosInstance.get("http://localhost:3001/api/v1/operations")
@@ -48,6 +52,8 @@ const Home = () => {
 
     return (
         <div className="Home">
+            {loading && <Loader />}
+            {error && <Error />}
             <h2 >Welcome , your balance is {sum}</h2>
             <Operations items={lastTen} />
         </div>

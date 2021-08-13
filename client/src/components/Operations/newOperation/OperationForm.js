@@ -1,93 +1,114 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './OperationForm.css'
 
-const OperationForm = (props) => {
-    const [enteredConcept, setEnteredConcept] = useState('')
-    const [enteredDate, setEnteredDate] = useState('')
-    const [enteredAmount, setEnteredAmount] = useState('')
-    const [enteredType, setEnteredType] = useState('')
-    const [enteredCategory, setEnteredCategory] = useState('')
+const initialForm = {
+    id: null,
+    concept: "",
+    date: "",
+    amount: "",
+    type: "",
+    category: "",
+};
+const OperationFormEdit = (props) => {
+    const [form, setForm] = useState(props.operationEdit);
 
-    const conceptChangeHandler = (event) => {
-        setEnteredConcept(event.target.value)
-    }
+    const handleChange = (event) => {
+        const { name, value } = event.target
 
-    const dateChangeHandler = (event) => {
-        setEnteredDate(event.target.value)
-    }
+        setForm({
+            ...form,
+            [name]: value
+        });
 
-    const amountChangeHandler = (event) => {
-        setEnteredAmount(event.target.value)
-    }
-    const typeChangeHandler = (event) => {
-        setEnteredType(event.target.value)
-    }
-    const categoryChangeHandler = (event) => {
-        setEnteredCategory(event.target.value)
-    }
+    };
 
-    const submitHandler = async (event) => {
+    useEffect(() => {
+        if (props.operationEdit) {
+
+            let dateFormat = (props.operationEdit.date).split('T')[0]
+            setForm({
+                id: props.operationEdit.id,
+                concept: props.operationEdit.concept,
+                date: dateFormat,
+                amount: props.operationEdit.amount,
+                type: props.operationEdit.type,
+                category: props.operationEdit.category
+            });
+
+        } else {
+            setForm(initialForm);
+        }
+    }, [props.operationEdit]);
+
+    const submitHandler = (event) => {
         event.preventDefault();
-
-        //validar entradas
-        if (!enteredConcept
-            || !enteredDate
-            || !enteredAmount
-            || !enteredType
-
-        ) return
-
-        const operationData = {
-            concept: enteredConcept,
-            amount: enteredAmount,
-            date: new Date(enteredDate),
-            type: enteredType,
-            category: enteredCategory
+        if (!form.concept || !form.category || !form.type
+            || !form.amount || !form.date) {
+            alert("Fill in all the fields")
+            return
         }
 
-        props.operationCreate(operationData);
-
-        setEnteredConcept('');
-        setEnteredDate('');
-        setEnteredAmount('');
-        setEnteredType('');
-        setEnteredCategory('');
+        if (form.id === null) {
+            props.operationCreate(form);
+        } else {
+            props.updated(form);
+        }
+        handleReset()
     }
+
+    const handleReset = () => {
+        setForm(initialForm);
+        props.setOperationEdit(null)
+    };
 
     return (
         <form onSubmit={submitHandler}>
-            <div className='new-operation__controls'>
-                <div className="new-operation__control">
-                    <label>Concept</label>
-                    <input type="text" value={enteredConcept}
-                        onChange={conceptChangeHandler} />
-                </div>
+            <div className='new-operation'>
+                <div className='new-operation__controls'>
+                    <div className="new-operation__control">
+                        <label>Concept</label>
+                        <input type="text" value={form.concept} name="concept"
+                            onChange={handleChange} />
+                    </div>
 
-                <div className="new-operation__control">
-                    <label>Amount</label>
-                    <input type="number" min="0.01" step="0.01" value={enteredAmount} onChange={amountChangeHandler} />
-                </div>
-                <div className="new-operation__control">
-                    <label>Date</label>
-                    <input type="date" value={enteredDate} onChange={dateChangeHandler} />
-                </div>
-                <div className="new-operation__control">
-                    <label>Category</label>
-                    <input type="text" value={enteredCategory}
-                        onChange={categoryChangeHandler} />
-                </div>
-                <div className="new-operation__radio" >
-                    <label>Type</label>
-                    <input type="radio" value="egress" checked={enteredType === 'egress'} onChange={typeChangeHandler} />Egress
-                    <input type="radio" value="entry" checked={enteredType === 'entry'} onChange={typeChangeHandler} />Entry
-                </div>
+                    <div className="new-operation__control">
+                        <label>Amount</label>
+                        <input type="number" min="0.01" step="0.01" value={form.amount} onChange={handleChange} name="amount" />
+                    </div>
+                    <div className="new-operation__control">
+                        <label>Date</label>
+                        <input type="date"
+                            value={form.date} onChange={handleChange} name="date" />
+                    </div>
+                    <div className="new-operation__control">
+                        <label>Category</label>
+                        <input type="text" value={form.category} name="category"
+                            onChange={handleChange} />
+                    </div>
+                    {form.id !== null ?
+                        (<div className="new-operation__radio" >
+                            <label>Type (Disabled)</label>
+                            <input disabled type="radio" name="egress"
+                                value="egress" checked={form.type === 'egress'} onChange={handleChange} />Egress
+                            <input disabled type="radio" name="entry"
+                                value="entry" checked={form.type === 'entry'} onChange={handleChange} />Entry
+                        </div>)
+                        :
+                        (<div className="new-operation__radio" >
+                            <label>Type </label>
+                            <input type="radio" name="type"
+                                value="egress" onChange={handleChange} />Egress
+                            <input type="radio" name="type"
+                                value="entry" onChange={handleChange} />Entry
+                        </div>)}
 
-            </div>
-            <div className="new-operation__actions">
-                <button type="submit">Add Operation</button>
-                <button onClick={props.onCancel}>Cancel</button>
+                </div>
+                <div className="new-operation__actions">
+                    <button type="submit">{form.id === null ? "Add" : "Edit"} Operation</button>
+                    <button type="reset" onClick={handleReset}>Cancel</button>
+                </div>
             </div>
         </form>
     )
 }
-export default OperationForm
+export default OperationFormEdit

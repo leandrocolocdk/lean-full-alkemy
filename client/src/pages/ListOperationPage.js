@@ -1,8 +1,11 @@
 import './Home.css';
 import { useEffect, useState } from "react"
 import Operations from '../components/Operations/Operations'
-import NewOperation from '../components/Operations/newOperation/NewOperation';
+
+import OperationForm from '../components/Operations/newOperation/OperationForm'
 import axiosInstance from '../services/axios';
+import Loader from '../components/Loader'
+import Error from '../components/Error'
 
 const initialOperation = {
   "id": "", "concept": "", "date": "", "amount": "", "type": "", "category": ""
@@ -11,7 +14,8 @@ const ListOperationPage = (props) => {
   const [operationEdit, setOperationEdit] = useState(initialOperation)
 
   const [listOfOperations, setListOfOperations] = useState([]);
-  // const [error, setError] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState('');
 
 
   let operationCreate = async (operation) => {
@@ -39,6 +43,7 @@ const ListOperationPage = (props) => {
       })
       .catch(error => {
         console.log(error)
+        setError(error)
       })
   }
 
@@ -50,6 +55,7 @@ const ListOperationPage = (props) => {
       deleteOperationsData(id)
     } catch (error) {
       console.log(error)
+      setError(error)
     }
   }
 
@@ -63,47 +69,57 @@ const ListOperationPage = (props) => {
           console.log(error)
         })
     } catch (error) {
-      // setError(error)
+      setError(error)
       console.log(error)
     }
   }
 
 
   useEffect(() => {
+
     getOperationsData()
+
   }, []);
 
   function getOperationsData() {
     try {
+      setLoading(true)
+      console.log(loading)
       axiosInstance.get("http://localhost:3001/api/v1/operations/")
         .then(response => {
           setListOfOperations(response.data)
+          // setLoading(false)
         })
         .catch((error) => {
           console.log(error)
+          setError(error)
+          setLoading(false)
         })
     } catch (error) {
-      // setError(error)
+      setError(error)
       console.log(error)
+      setLoading(false)
     }
+
   }
 
 
   return (
-    // si hay id es edit, entonces activar componenteeditar.
+
     <div className="ListOperationPage">
-      <NewOperation
+      {loading && <Loader />}
+      {error && <Error message={`${error} `} bgColor="#dc3545" />}
+      <OperationForm
         operationCreate={operationCreate}
 
-        operationEdit={operationEdit}//objeto
+        operationEdit={operationEdit}//objeto a editar
         setOperationEdit={setOperationEdit}//funcion
-        updated={updated}
+        updated={updated}//objeto editado
       />
 
 
       <Operations
         items={listOfOperations}
-
 
         // onItemEdit={onItemEdit}// llega el item completo
         setOperationEdit={setOperationEdit}
